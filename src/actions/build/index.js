@@ -140,10 +140,11 @@ export const build = {
 
             for (const cfgFile of cfgFiles) {
                 const localConfig = await getLocalAppConfig(cfgFile);
-                const options = getOptions(
-                    cliOptions,
-                    localConfig.build,
-                    globalConfig.build,
+
+                const { build: options } = getOptions(
+                    { build: cliOptions },
+                    localConfig.store,
+                    globalConfig.store,
                 );
 
                 const command = NLRC.getCfgBuildCommand(cfgFile, options);

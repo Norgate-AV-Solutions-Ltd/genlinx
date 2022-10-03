@@ -1,4 +1,4 @@
-import { Command } from "commander";
+import { Command, Argument, Option } from "commander";
 import { actions } from "../../actions";
 
 export function config() {
@@ -6,21 +6,60 @@ export function config() {
 
     command
         .description("edit configuration properties for genlinx")
-        .option("-g, --global", "edit the global configuration")
-        .option("-l, --local", "edit the local configuration");
+        .addArgument(
+            new Argument("[key]", "the configuration property to edit"),
+        )
+        .addArgument(
+            new Argument(
+                "[value]",
+                "the value to set the configuration property to",
+            ),
+        )
+        .addOption(
+            new Option("--global", "edit the global configuration").conflicts(
+                "local",
+            ),
+        )
+        .addOption(
+            new Option("--local", "edit the local configuration").conflicts(
+                "global",
+            ),
+        )
+        .addOption(
+            new Option("-l, --list", "display the configuration").conflicts([
+                "[key]",
+                "[value]",
+            ]),
+        )
+        // .addOption(new Option("--replace-all", "display the configuration"))
+        .addOption(new Option("--add", "display the configuration"))
+        .addOption(new Option("--get", "get the value for the given key"))
+        // .addOption(new Option("--get-all", "display the configuration"))
+        .addOption(new Option("--unset", "display the configuration"))
+        // .addOption(new Option("--unset-all", "display the configuration"))
+        .addOption(new Option("-e, --edit", "display the configuration"))
+        .action(async (key, value, options) => {
+            if (!key && !value) {
+                if (options.list) {
+                    actions.config.show(options);
+                    process.exit();
+                }
 
-    command
-        .command("set")
-        .argument("key <string>", "key to set")
-        .argument("value(s) <string...>", "value(s) to set")
-        .description("set configuration properties for genlinx")
-        .action(() => actions.config.set());
+                if (options.edit) {
+                    await actions.config.edit(options);
+                    process.exit();
+                }
 
-    command
-        .command("get")
-        .argument("key <string>", "key to get")
-        .description("get configuration properties for genlinx")
-        .action(() => actions.config.get());
+                process.exit();
+            }
+
+            if (!value) {
+                actions.config.get(key, options);
+                process.exit();
+            }
+
+            await actions.config.set(key, value, options);
+        });
 
     return command;
 }
