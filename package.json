@@ -51,7 +51,7 @@
         "@types/fs-extra": "^9.0.13",
         "@types/inquirer": "^9.0.1",
         "@types/node": "^18.8.0",
-        "all-contributors-cli": "^6.22.0",
+        "all-contributors-cli": "^6.24.0",
         "cz-conventional-changelog": "3.3.0",
         "doctoc": "^2.2.1",
         "eslint": "^8.24.0",
