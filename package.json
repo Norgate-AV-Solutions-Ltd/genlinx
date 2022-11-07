@@ -79,6 +79,6 @@
         "mergician": "^1.0.3",
         "node-jq": "^2.3.4",
         "string-builder": "^0.1.8",
-        "which": "^2.0.2"
+        "which": "^3.0.0"
     }
 }
